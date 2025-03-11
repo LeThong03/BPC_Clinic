@@ -1,4 +1,7 @@
 package main.java.com.bpc.model;
 
-public class BPC_BookingStatus {
+public enum BPC_BookingStatus {
+    BOOKED,
+    CANCELLED,
+    ATTENDED
 }
