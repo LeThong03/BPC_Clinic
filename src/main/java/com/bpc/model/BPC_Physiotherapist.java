@@ -11,6 +11,7 @@ public class BPC_Physiotherapist {
     private String phone;
     private List <String> expertise;
     private Map<LocalDateTime, Boolean> timetable; //true: available, false: booked
+    private boolean isAvailable;  //true: available, false: not available
 
     public BPC_Physiotherapist(String id, String name, String address, String phone, List<String> expertise) {
         //initialize physiotherapist variables
@@ -39,6 +40,9 @@ public class BPC_Physiotherapist {
     }
 
     public List<LocalDateTime> getAvailableAppointments() {
+        if(!isAvailable){
+            return new ArrayList<>();
+        }
         return timetable.entrySet().stream()
                 .filter(Map.Entry::getValue)
                 .map(Map.Entry::getKey)
@@ -50,10 +54,21 @@ public class BPC_Physiotherapist {
     }
 
     public void assignAppointment(LocalDateTime dateTime) {
-        if (!isAvailable(dateTime)) {
-            throw new IllegalArgumentException("Time slot is not available");
+        if (!isAvailable) {
+            throw new IllegalArgumentException("Physiotherapist is not available");
+        }
+        if(!isAvailable(dateTime)){
+            throw new IllegalArgumentException("Slot is not available");
         }
         timetable.put(dateTime, false);
+    }
+
+    public void deactivateAppointment(){
+        this.isAvailable = false;
+    }
+
+    public void activateAppointment(){
+        this.isAvailable = true;
     }
 
     //Getter and Setter
@@ -62,4 +77,5 @@ public class BPC_Physiotherapist {
     public String getAddress() { return address; }
     public String getPhone() { return phone; }
     public List<String> getExpertise() { return new ArrayList<>(expertise); }
+    public boolean isAvailable() { return isAvailable; }
 }
