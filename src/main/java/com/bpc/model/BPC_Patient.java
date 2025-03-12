@@ -27,17 +27,17 @@ public class BPC_Patient {
         if (!active) {
             throw new IllegalArgumentException("Cannot add booking to inactive patient");
         }
-        if (hasOverlappingBooking()) {
+        if (hasOverlappingBooking(booking)) {
             throw new IllegalArgumentException("Patient already has a booking at this time");
         }
         bookings.add(booking);
     }
 
-    public boolean hasOverlappingBooking() {
+    public boolean hasOverlappingBooking(BPC_Booking newBooking) {
         return bookings.stream()
                 .filter(b -> b.getStatus() == BPC_BookingStatus.BOOKED)
-                .anyMatch(b -> b.getTreatment().getStartTime()
-                        .equals(booking.getTreatment().getStartTime()));
+                .anyMatch(b -> b.getTreatment().getDateTime()
+                        .equals(newBooking.getTreatment().getDateTime()));
     }
 
     public boolean hasActiveBooking() {
