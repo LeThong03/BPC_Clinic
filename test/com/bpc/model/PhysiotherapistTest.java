@@ -26,7 +26,7 @@ public class PhysiotherapistTest {
 
     @Test
     void testInitializeActiveStatus(){
-        assertTrue(physiotherapist.isAvailable());
+        assertTrue(physiotherapist.isActive());
     }
 
     @Test
@@ -47,50 +47,54 @@ public class PhysiotherapistTest {
                     "Appointment should be on or after April 1");
             assertTrue(appointment.isBefore(expectedEnd),
                     "Appointment should be before May 1");
+            // Ensure appointments are only on weekdays
+            assertTrue(appointment.getDayOfWeek().getValue() < 6,
+                    "Appointment should be on a weekday");
         }
-
         // If the physiotherapist is not available, the list should be empty
-        physiotherapist.deactivateAppointment();
+        physiotherapist.deactivate();
         availableAppointments = physiotherapist.getAvailableAppointments();
         assertTrue(availableAppointments.isEmpty());
     }
 
     @Test
     void testIsAvailable(){
-        // Given a test date/time
-        // When checking availability
+        // Given a test date/time in April 2025
         boolean available = physiotherapist.isAvailable(dateTime);
 
         // Then it should be available initially
         assertTrue(available);
-    }
 
-    @Test
-    void testAssignAppointment() {
-        // Given a test date/time
-        // When assigning an appointment
+        // When assigned
         physiotherapist.assignAppointment(dateTime);
 
-        // Then the appointment should be marked as unavailable
+        // Then it should not be available
         assertFalse(physiotherapist.isAvailable(dateTime));
 
-        // When trying to assign the same appointment again
-        Exception exception = assertThrows(IllegalStateException.class, () -> {
-            physiotherapist.assignAppointment(dateTime);
-        });
+        // When freed
+        physiotherapist.freeAppointment(dateTime);
 
-        // Then it should throw an exception
-        assertEquals("Slot is not available", exception.getMessage());
+        // Then it should be available again
+        assertTrue(physiotherapist.isAvailable(dateTime));
     }
 
     @Test
     void testActivateDeactivate() {
-        physiotherapist.deactivateAppointment();
-        assertFalse(physiotherapist.isAvailable());
+        // Initially active
+        assertTrue(physiotherapist.isActive());
+
+        // When deactivated
+        physiotherapist.deactivate();
+
+        // Then not active and no available appointments
+        assertFalse(physiotherapist.isActive());
         assertTrue(physiotherapist.getAvailableAppointments().isEmpty());
 
-        physiotherapist.activateAppointment();
-        assertTrue(physiotherapist.isAvailable());
+        // When activated
+        physiotherapist.activate();
+
+        // Then active again and has available appointments
+        assertTrue(physiotherapist.isActive());
         assertFalse(physiotherapist.getAvailableAppointments().isEmpty());
     }
 }

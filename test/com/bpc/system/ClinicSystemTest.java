@@ -28,8 +28,8 @@ public class ClinicSystemTest {
         // Add test patient
         testPatient = system.addPatient("Test Patient", "123 Test St", "555-1234");
 
-        // Add test physiotherapist
-        List<String> expertise = List.of("Test Specialty");
+        // Add test physiotherapist with expertise that matches the treatments in tests
+        List<String> expertise = List.of("Test Specialty", "Treatment", "Massage", "Rehabilitation");
         testPhysio = system.addPhysiotherapist("Test Physio", "456 Test Ave", "555-5678", expertise);
 
         // Set test date/time to April 15, 2025, 10:00 AM
@@ -77,7 +77,7 @@ public class ClinicSystemTest {
         for (String skill : expertise) {
             assertTrue(physio.getExpertise().contains(skill));
         }
-        assertTrue(physio.isAvailable());
+        assertTrue(physio.isActive());
         assertTrue(system.getPhysiotherapists().containsKey(physio.getId()));
     }
 

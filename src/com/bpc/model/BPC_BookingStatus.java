@@ -1,4 +1,4 @@
-package main.java.com.bpc.model;
+package com.bpc.model;
 
 public enum BPC_BookingStatus {
     BOOKED,

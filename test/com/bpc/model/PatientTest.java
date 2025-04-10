@@ -24,7 +24,7 @@ public class PatientTest {
     @Test
     void testAddBooking() {
         BPC_Treatment treatment = new BPC_Treatment("Test Treatment", physio, dateTime);
-        BPC_Booking booking = new BPC_Booking("B1", patient, treatment, BPC_BookingStatus.BOOKED, LocalDateTime.now());
+        BPC_Booking booking = new BPC_Booking("B1", patient, treatment);
 
         patient.addBooking(booking);
 
@@ -39,7 +39,7 @@ public class PatientTest {
 
         // Create a booking
         BPC_Treatment treatment = new BPC_Treatment("Test Treatment", physio, dateTime);
-        BPC_Booking booking = new BPC_Booking("B1", patient, treatment, BPC_BookingStatus.BOOKED, LocalDateTime.now());
+        BPC_Booking booking = new BPC_Booking("B1", patient, treatment);
         patient.addBooking(booking);
 
         //The patient should now have an active booking
@@ -79,7 +79,7 @@ public class PatientTest {
     void testCannotDeactivateWithActiveBookings(){
         //Given a patient with an active booking
         BPC_Treatment treatment = new BPC_Treatment("Test Treatment", physio, dateTime);
-        BPC_Booking booking = new BPC_Booking("B1", patient, treatment, BPC_BookingStatus.BOOKED, LocalDateTime.now());
+        BPC_Booking booking = new BPC_Booking("B1", patient, treatment);
         patient.addBooking(booking);
 
         //When deactivating the patient
@@ -101,7 +101,7 @@ public class PatientTest {
 
         // Create a booking
         BPC_Treatment treatment = new BPC_Treatment("Test Treatment", physio, dateTime);
-        BPC_Booking booking = new BPC_Booking("B1", patient, treatment, BPC_BookingStatus.BOOKED, LocalDateTime.now());
+        BPC_Booking booking = new BPC_Booking("B1", patient, treatment);
 
         // Attempt to add the booking to the inactive patient
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {

@@ -1,4 +1,4 @@
-package main.java.com.bpc.model;
+package com.bpc.model;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +9,7 @@ public class BPC_Booking {
     private BPC_BookingStatus status;
     private LocalDateTime bookingTime;
 
-    public BPC_Booking(String id, BPC_Patient patient, BPC_Treatment treatment, BPC_BookingStatus status, LocalDateTime bookingTime) {
+    public BPC_Booking(String id, BPC_Patient patient, BPC_Treatment treatment) {
         this.id = id;
         this.patient = patient;
         this.treatment = treatment;
@@ -18,25 +18,29 @@ public class BPC_Booking {
         treatment.markAsBooked();
     }
 
-    public void cancelBooking(){
-        if(status == BPC_BookingStatus.BOOKED){
-            throw new IllegalArgumentException("Booking is not confirmed");
+    private void validateBookingStatus(BPC_BookingStatus expected) {
+        if (status != expected) {
+            throw new IllegalStateException("Booking is not in " + expected + " state");
         }
+    }
+
+    public void cancelBooking(){
+        validateBookingStatus(BPC_BookingStatus.BOOKED);
         status = BPC_BookingStatus.CANCELLED;
+        // Free up the physiotherapist's time slot
+        treatment.getPhysiotherapist().freeAppointment(treatment.getDateTime());
     }
 
     public void attend(){
-        if (status != BPC_BookingStatus.BOOKED) {
-            throw new IllegalArgumentException("Booking is not confirmed");
-        }
+        validateBookingStatus(BPC_BookingStatus.BOOKED);
         status = BPC_BookingStatus.ATTENDED;
     }
 
     public void changeBooking(BPC_Treatment newTreatment){
-        if(status != BPC_BookingStatus.BOOKED){
-            throw new IllegalArgumentException("Booking is not confirmed");
-        }
-        this.treatment = treatment;
+        validateBookingStatus(BPC_BookingStatus.BOOKED);
+        // Free up the physiotherapist's time slot for the old treatment
+        treatment.getPhysiotherapist().freeAppointment(treatment.getDateTime());
+        this.treatment = newTreatment;
         newTreatment.markAsBooked();
     }
 

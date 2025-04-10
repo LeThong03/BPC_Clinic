@@ -1,4 +1,4 @@
-package main.java.com.bpc.model;
+package com.bpc.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +48,7 @@ public class BPC_Patient {
     public void deactivate() {
         //deactivate patient
         if (hasActiveBooking()) {
-            throw new IllegalArgumentException("Cannot deactivate patient with active booking");
+            throw new IllegalStateException("Cannot deactivate patient with active booking");
         }
         this.active = false;
     }

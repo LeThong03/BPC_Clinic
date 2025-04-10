@@ -1,4 +1,4 @@
-package main.java.com.bpc.util;
+package com.bpc.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
