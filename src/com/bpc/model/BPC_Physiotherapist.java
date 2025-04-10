@@ -1,7 +1,8 @@
-package main.java.com.bpc.model;
+package com.bpc.model;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.Objects;
 
 public class BPC_Physiotherapist {
     //declare physiotherapist variables
@@ -11,7 +12,7 @@ public class BPC_Physiotherapist {
     private String phone;
     private List <String> expertise;
     private Map<LocalDateTime, Boolean> timetable; //true: available, false: booked
-    private boolean isAvailable;  //true: available, false: not available
+    private boolean isActive;  //true: available, false: not available
 
     public BPC_Physiotherapist(String id, String name, String address, String phone, List<String> expertise) {
         //initialize physiotherapist variables
@@ -21,15 +22,26 @@ public class BPC_Physiotherapist {
         this.phone = phone;
         this.expertise = new ArrayList<>(expertise);
         this.timetable = initializeTimetable();
+        this.isActive = true; //default to available
     }
 
     private Map<LocalDateTime, Boolean> initializeTimetable() {
         Map<LocalDateTime, Boolean> slots = new TreeMap<>();
-        LocalDateTime start = LocalDateTime.now().withHour(9).withMinute(0);
 
-        //Initialize timetable for 4 weeks
-        for (int day = 0; day < 28; day++) {
+        // Set fixed start date to April 1, 2025
+        LocalDateTime start = LocalDateTime.of(2025, 4, 1, 9, 0);
+
+        // Calculate number of days in April (30)
+        int daysInApril = 30;
+
+        // Initialize timetable for April
+        for (int day = 0; day < daysInApril; day++) {
             LocalDateTime currentDay = start.plusDays(day);
+
+            // Skip weekends (Saturday = 6, Sunday = 7)
+            if (currentDay.getDayOfWeek().getValue() >= 6) {
+                continue;
+            }
 
             // 9am to 5pm, 1 hour slots
             for (int hour = 9; hour < 17; hour++) {
@@ -40,7 +52,7 @@ public class BPC_Physiotherapist {
     }
 
     public List<LocalDateTime> getAvailableAppointments() {
-        if(!isAvailable){
+        if (!isActive) {
             return new ArrayList<>();
         }
         return timetable.entrySet().stream()
@@ -50,25 +62,46 @@ public class BPC_Physiotherapist {
     }
 
     public boolean isAvailable(LocalDateTime dateTime) {
-        return timetable.getOrDefault(dateTime, false);
+        return isActive && timetable.getOrDefault(dateTime, false);
     }
 
     public void assignAppointment(LocalDateTime dateTime) {
-        if (!isAvailable) {
-            throw new IllegalArgumentException("Physiotherapist is not available");
+        if (!isActive) {
+            throw new IllegalStateException("Physiotherapist is not available");
         }
-        if(!isAvailable(dateTime)){
-            throw new IllegalArgumentException("Slot is not available");
+        if (!isAvailable(dateTime)) {
+            throw new IllegalStateException("Slot is not available");
         }
         timetable.put(dateTime, false);
     }
 
-    public void deactivateAppointment(){
-        this.isAvailable = false;
+    public void freeAppointment(LocalDateTime dateTime) {
+        if (timetable.containsKey(dateTime)) {
+            timetable.put(dateTime, true);
+        }
     }
 
-    public void activateAppointment(){
-        this.isAvailable = true;
+    // Renamed methods for clarity
+    public void deactivate() {
+        this.isActive = false;
+    }
+
+    public void activate() {
+        this.isActive = true;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BPC_Physiotherapist that = (BPC_Physiotherapist) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     //Getter and Setter
@@ -77,5 +110,5 @@ public class BPC_Physiotherapist {
     public String getAddress() { return address; }
     public String getPhone() { return phone; }
     public List<String> getExpertise() { return new ArrayList<>(expertise); }
-    public boolean isAvailable() { return isAvailable; }
+    public boolean isActive() { return isActive; }
 }
