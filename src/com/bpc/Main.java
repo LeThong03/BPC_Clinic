@@ -55,6 +55,12 @@ public class Main {
                 case 10:
                     listAllPhysiotherapists();
                     break;
+                case 11:
+                    removePatient();
+                    break;
+                case 12:
+                    reactivatePatient();
+                    break;
                 case 0:
                     running = false;
                     System.out.println("Exiting the system...");
@@ -174,7 +180,63 @@ public class Main {
         }
     }
 
-    // In Main class
+    private static void removePatient() {
+        System.out.println("\n=== REMOVE PATIENT ===");
+
+        // List patients
+        listAllPatients();
+
+        String patientId = getStringInput("Enter patient ID to remove: ");
+
+        try {
+            BPC_Patient patient = system.getPatients().get(patientId);
+            if (patient == null) {
+                System.out.println("Patient not found.");
+                return;
+            }
+
+            // Check if patient has active bookings
+            if (patient.hasActiveBooking()) {
+                System.out.println("Cannot remove patient with active bookings. Please cancel bookings first.");
+                return;
+            }
+
+            // Deactivate patient
+            patient.deactivate();
+            System.out.println("Patient deactivated successfully.");
+        } catch (Exception e) {
+            System.out.println("Error removing patient: " + e.getMessage());
+        }
+    }
+
+    private static void reactivatePatient() {
+        System.out.println("\n=== REACTIVATE PATIENT ===");
+
+        // List all patients
+        listAllPatients();
+
+        String patientId = getStringInput("Enter patient ID to reactivate: ");
+
+        try {
+            BPC_Patient patient = system.getPatients().get(patientId);
+            if (patient == null) {
+                System.out.println("Patient not found.");
+                return;
+            }
+
+            if (patient.isActive()) {
+                System.out.println("Patient is already active.");
+                return;
+            }
+
+            patient.reactivate();
+            System.out.println("Patient reactivated successfully.");
+        } catch (Exception e) {
+            System.out.println("Error reactivating patient: " + e.getMessage());
+        }
+    }
+
+
     private static void listAllPatients() {
         System.out.println("\n=== PATIENTS ===");
 
@@ -359,6 +421,8 @@ public class Main {
         System.out.println("8. List All Bookings");
         System.out.println("9. List All Patients");
         System.out.println("10. List All Physiotherapists");
+        System.out.println("11. Remove Patient");
+        System.out.println("12. Reactivate Patient");
         System.out.println("0. Exit");
     }
 
