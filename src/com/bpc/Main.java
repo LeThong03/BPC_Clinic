@@ -152,21 +152,6 @@ public class Main {
         }
     }
 
-    private static void displayMenu() {
-        System.out.println("\n=== BOOST PHYSIO CLINIC SYSTEM ===");
-        System.out.println("1. Add Patient");
-        System.out.println("2. Add Physiotherapist");
-        System.out.println("3. Book Appointment");
-        System.out.println("4. Cancel Booking");
-        System.out.println("5. Mark Booking as Attended");
-        System.out.println("6. Modify Booking");
-        System.out.println("7. Generate Report");
-        System.out.println("8. List All Bookings");
-        System.out.println("9. List All Patients");
-        System.out.println("10. List All Physiotherapists");
-        System.out.println("0. Exit");
-    }
-
     private static void addPatient() {
         System.out.println("\n=== ADD PATIENT ===");
         String name = getStringInput("Enter patient name: ");
@@ -348,4 +333,21 @@ public class Main {
         String report = system.generateReport();
         System.out.println(report);
     }
+
+
+    private static void displayMenu() {
+        System.out.println("\n=== BOOST PHYSIO CLINIC SYSTEM ===");
+        System.out.println("1. Add Patient");
+        System.out.println("2. Add Physiotherapist");
+        System.out.println("3. Book Appointment");
+        System.out.println("4. Cancel Booking");
+        System.out.println("5. Mark Booking as Attended");
+        System.out.println("6. Modify Booking");
+        System.out.println("7. Generate Report");
+        System.out.println("8. List All Bookings");
+        System.out.println("9. List All Patients");
+        System.out.println("10. List All Physiotherapists");
+        System.out.println("0. Exit");
+    }
+
 }
