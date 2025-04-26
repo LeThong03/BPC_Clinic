@@ -21,7 +21,7 @@ public class PhysiotherapistTest {
                 "456 Test Ave",
                 "555-5678",
                 List.of("Test Specialty"));
-        dateTime = LocalDateTime.of(2025, 4, 15, 10, 0);
+        dateTime = LocalDateTime.of(2025, 6, 2, 10, 0);
     }
 
     @Test
@@ -38,15 +38,15 @@ public class PhysiotherapistTest {
         assertFalse(availableAppointments.isEmpty());
 
         // Define expected start and end dates for April 2025
-        LocalDateTime expectedStart = LocalDateTime.of(2025, 4, 1, 9, 0);
-        LocalDateTime expectedEnd = LocalDateTime.of(2025, 5, 1, 0, 0); // May 1, midnight
+        LocalDateTime expectedStart = LocalDateTime.of(2025, 6, 2, 9, 0);
+        LocalDateTime expectedEnd = LocalDateTime.of(2025, 7, 1, 0, 0);
 
         // Check if all appointments are within April
         for (LocalDateTime appointment : availableAppointments) {
             assertTrue(appointment.isEqual(expectedStart) || appointment.isAfter(expectedStart),
-                    "Appointment should be on or after April 1");
+                    "Appointment should be on or after June 1");
             assertTrue(appointment.isBefore(expectedEnd),
-                    "Appointment should be before May 1");
+                    "Appointment should be before July 1");
             // Ensure appointments are only on weekdays
             assertTrue(appointment.getDayOfWeek().getValue() < 6,
                     "Appointment should be on a weekday");

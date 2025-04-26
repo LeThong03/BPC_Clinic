@@ -26,7 +26,7 @@ public class TreatmentTest {
                 Arrays.asList("Test Specialty", "Test Treatment")
         );
 
-        dateTime = LocalDateTime.of(2025, 4, 15, 10, 0);
+        dateTime = LocalDateTime.of(2025, 6, 16, 10, 0);
         treatment = new BPC_Treatment("Test Treatment", physiotherapist, dateTime);
     }
 

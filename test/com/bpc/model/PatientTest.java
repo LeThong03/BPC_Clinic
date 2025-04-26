@@ -18,7 +18,7 @@ public class PatientTest {
         patient = new BPC_Patient("P1", "Test Patient", "123 Test St", "555-1234");
         physio = new BPC_Physiotherapist("PHY1", "Test Physio", "456 Test Ave", "555-5678",
                 List.of("Test Specialty"));
-        dateTime = LocalDateTime.of(2025, 4, 15, 10, 0);
+        dateTime = LocalDateTime.of(2025, 6, 16, 10, 0);
     }
 
     @Test

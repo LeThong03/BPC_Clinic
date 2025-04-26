@@ -23,7 +23,7 @@ public class BookingTest {
                 "555-5678",
                 Arrays.asList("Test Specialty", "Test Treatment")
         );
-        dateTime = LocalDateTime.of(2025, 4, 15, 10, 0);
+        dateTime = LocalDateTime.of(2025, 6, 16, 10, 0);
         treatment = new BPC_Treatment("Test Treatment", physiotherapist, dateTime);
         booking = new BPC_Booking("B1", patient, treatment);
     }

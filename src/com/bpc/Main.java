@@ -98,9 +98,9 @@ public class Main {
         );
 
         // Add sample bookings
-        LocalDateTime day1 = LocalDateTime.of(2025, 4, 21, 10, 0);
-        LocalDateTime day2 = LocalDateTime.of(2025, 4, 22, 14, 0);
-        LocalDateTime day3 = LocalDateTime.of(2025, 4, 23, 11, 0);
+        LocalDateTime day1 = LocalDateTime.of(2025, 6, 2, 10, 0);
+        LocalDateTime day2 = LocalDateTime.of(2025, 6, 4, 14, 0);
+        LocalDateTime day3 = LocalDateTime.of(2025, 6, 6, 11, 0);
 
         try {
             // Today at 10:00

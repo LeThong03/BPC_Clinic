@@ -33,7 +33,7 @@ public class ClinicSystemTest {
         testPhysio = system.addPhysiotherapist("Test Physio", "456 Test Ave", "555-5678", expertise);
 
         // Set test date/time to April 15, 2025, 10:00 AM
-        testDateTime = LocalDateTime.of(2025, 4, 15, 10, 0);
+        testDateTime = LocalDateTime.of(2025, 6, 2, 10, 0);
     }
 
     @Test
@@ -179,7 +179,7 @@ public class ClinicSystemTest {
                 "Second Physio",
                 "Another Address",
                 "555-9999",
-                List.of("Another Specialty")
+                List.of("Treatment", "Another Specialty")
         );
 
         // And a second patient
@@ -278,7 +278,7 @@ public class ClinicSystemTest {
                 "Second Physio",
                 "Another Address",
                 "555-9999",
-                List.of("Another Specialty")
+                List.of("Treatment", "Another Specialty")
         );
 
         // And bookings with different attendance status

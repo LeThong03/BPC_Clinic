@@ -29,13 +29,13 @@ public class BPC_Physiotherapist {
         Map<LocalDateTime, Boolean> slots = new TreeMap<>();
 
         // Set fixed start date to April 1, 2025
-        LocalDateTime start = LocalDateTime.of(2025, 4, 1, 9, 0);
+        LocalDateTime start = LocalDateTime.of(2025, 6, 1, 9, 0);
 
         // Calculate number of days in April (30)
-        int daysInApril = 30;
+        int daysInJune = 30;
 
         // Initialize timetable for April
-        for (int day = 0; day < daysInApril; day++) {
+        for (int day = 0; day < daysInJune; day++) {
             LocalDateTime currentDay = start.plusDays(day);
 
             // Skip weekends (Saturday = 6, Sunday = 7)

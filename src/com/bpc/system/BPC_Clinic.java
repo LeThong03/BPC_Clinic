@@ -37,11 +37,42 @@ public class BPC_Clinic {
     //booking management
     public BPC_Booking createBooking(String patientId, String physiotherapistId,
                                      String treatmentName, LocalDateTime dateTime) {
+        // Validate input parameters
+        if (patientId == null || physiotherapistId == null || treatmentName == null || dateTime == null) {
+            throw new IllegalArgumentException("All parameters must be non-null");
+        }
+
+        // Retrieve patient and physiotherapist
         BPC_Patient patient = patients.get(patientId);
+        if (patient == null) {
+            throw new IllegalArgumentException("Patient not found: " + patientId);
+        }
+
+        if (!patient.isActive()) {
+            throw new IllegalStateException("Cannot create booking for inactive patient");
+        }
+
         BPC_Physiotherapist physiotherapist = physiotherapists.get(physiotherapistId);
+        if (physiotherapist == null) {
+            throw new IllegalArgumentException("Physiotherapist not found: " + physiotherapistId);
+        }
+
+        if (!physiotherapist.isActive()) {
+            throw new IllegalStateException("Physiotherapist is not active");
+        }
 
         if (!physiotherapist.isAvailable(dateTime)) {
             throw new IllegalStateException("Physiotherapist is not available at this time");
+        }
+
+        // Check if treatment name is valid for this physiotherapist
+        boolean validTreatment = physiotherapist.getExpertise().stream()
+                .anyMatch(expertise ->
+                        treatmentName.toLowerCase().contains(expertise.toLowerCase()) ||
+                                expertise.toLowerCase().contains(treatmentName.toLowerCase()));
+
+        if (!validTreatment) {
+            throw new IllegalArgumentException("The treatment is not valid for this physiotherapist's expertise");
         }
         String bookingId = BPC_IdGenerator.generateBookingId();
         BPC_Treatment treatment = new BPC_Treatment(treatmentName, physiotherapist, dateTime);
