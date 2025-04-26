@@ -68,7 +68,6 @@ public class BPC_Treatment {
     public void markAsUnbooked() {
         if (booked) {
             booked = false;
-            // Free up the physiotherapist's time slot
             physiotherapist.freeAppointment(dateTime);
         }
     }
