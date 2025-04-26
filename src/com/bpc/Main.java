@@ -8,9 +8,7 @@ import com.bpc.system.BPC_Clinic;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Scanner;
-import java.util.List;
-import java.util.Arrays;
+import java.util.*;
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
@@ -83,52 +81,62 @@ public class Main {
                 "555-0102",
                 Arrays.asList("Back Pain", "Neck Pain", "Posture")
         );
-
-        // Add patients
-        BPC_Patient patient1 = system.addPatient(
-                "Alice Brown",
-                "321 Pine St",
-                "555-0201"
+        BPC_Physiotherapist physio3 = system.addPhysiotherapist(
+                "Emily Davis",
+                "789 Elm St",
+                "555-0103",
+                Arrays.asList("Posture", "Sports Rehab")
+        );
+        BPC_Physiotherapist physio4 = system.addPhysiotherapist(
+                "Michael Brown",
+                "101 Oak St",
+                "555-0104",
+                Arrays.asList("Arthritis", "Massage Therapy")
+        );
+        BPC_Physiotherapist physio5 = system.addPhysiotherapist(
+                "Jessica Wilson",
+                "202 Birch St",
+                "555-0105",
+                Arrays.asList("Neck Pain", "Posture")
         );
 
-        BPC_Patient patient2 = system.addPatient(
-                "Bob Wilson",
-                "654 Maple Dr",
-                "555-0202"
-        );
+        // Add 10 patients
+        List<BPC_Patient> patients = new ArrayList<>();
+        for (int i = 1; i <= 15; i++) {
+            BPC_Patient patient = system.addPatient(
+                    "Patient " + i, "Address " + i, "07903033" + String.format("%02d", i)
+            );
+            patients.add(patient);
+        }
 
-        // Add sample bookings
-        LocalDateTime day1 = LocalDateTime.of(2025, 6, 2, 10, 0);
-        LocalDateTime day2 = LocalDateTime.of(2025, 6, 4, 14, 0);
-        LocalDateTime day3 = LocalDateTime.of(2025, 6, 6, 11, 0);
+        // Add bookings for 4 weeks
+        LocalDateTime baseDate = LocalDateTime.of(2025, 6, 2, 9, 0);
 
         try {
-            // Today at 10:00
-            BPC_Booking booking1 = system.createBooking(
-                    patient1.getId(),
-                    physio1.getId(),
-                    "Sport Injury Assessment",
-                    day1
-            );
+            int patientIndex = 0; // <- track which patient to assign
 
-            // Tomorrow at 14:00
-            BPC_Booking booking2 = system.createBooking(
-                    patient2.getId(),
-                    physio2.getId(),
-                    "Back Pain Treatment",
-                    day2
-            );
+            for (int day = 0; day < 5; day++) { // Monday to Friday
+                LocalDateTime dayDate = baseDate.plusDays(day);
 
-            // Next week at 11:00
-            BPC_Booking booking3 = system.createBooking(
-                    patient1.getId(),
-                    physio2.getId(),
-                    "Neck Pain Follow-up",
-                    day3
-            );
+                // Only 1 slot per day for simplicity
+                LocalDateTime bookingTime = dayDate.withHour(10); // 10:00 AM
 
-            // Mark first booking as attended
-            system.attendBooking(booking1.getId());
+                List<BPC_Physiotherapist> physios = List.of(physio1, physio2, physio3, physio4, physio5);
+                BPC_Physiotherapist selectedPhysio = physios.get(new Random().nextInt(physios.size()));
+
+                if (patientIndex < patients.size()) {
+                    BPC_Patient selectedPatient = patients.get(patientIndex);
+                    String treatmentName = selectedPhysio.getExpertise().get(0);
+
+                    system.createBooking(
+                            selectedPatient.getId(),
+                            selectedPhysio.getId(),
+                            treatmentName,
+                            bookingTime
+                    );
+                    patientIndex++;
+                }
+            }
 
             System.out.println("Sample data created successfully.");
         } catch (Exception e) {
@@ -169,7 +177,11 @@ public class Main {
     // In Main class
     private static void listAllPatients() {
         System.out.println("\n=== PATIENTS ===");
-        for (BPC_Patient patient : system.getPatients().values()) {
+
+        List<BPC_Patient> sortedPatients = new ArrayList<>(system.getPatients().values());
+        sortedPatients.sort(Comparator.comparing(BPC_Patient::getId));
+
+        for (BPC_Patient patient : sortedPatients) {
             System.out.printf("%s | %s | %s | %s | Active: %s%n",
                     patient.getId(),
                     patient.getName(),
