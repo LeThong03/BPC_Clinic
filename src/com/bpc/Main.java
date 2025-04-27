@@ -61,6 +61,12 @@ public class Main {
                 case 12:
                     reactivatePatient();
                     break;
+                case 13:
+                    searchByExpertise();
+                    break;
+                case 14:
+                    searchByPhysiotherapistName();
+                    break;
                 case 0:
                     running = false;
                     System.out.println("Exiting the system...");
@@ -401,6 +407,56 @@ public class Main {
         }
     }
 
+    private static void searchByExpertise() {
+        System.out.println("\n=== SEARCH PHYSIOTHERAPISTS BY EXPERTISE ===");
+        String expertise = getStringInput("Enter expertise area (e.g., Massage, Sports Injury): ");
+
+        boolean found = false;
+        for (BPC_Physiotherapist physio : system.getPhysiotherapists().values()) {
+            for (String skill : physio.getExpertise()) {
+                if (skill.equalsIgnoreCase(expertise.trim())) {
+                    System.out.println("Physiotherapist: " + physio.getName());
+                    List<LocalDateTime> availableSlots = physio.getAvailableAppointments();
+                    if (availableSlots.isEmpty()) {
+                        System.out.println("  No available slots.");
+                    } else {
+                        for (LocalDateTime slot : availableSlots) {
+                            System.out.println("  Available slot: " + slot.format(dateTimeFormatter));
+                        }
+                    }
+                    found = true;
+                }
+            }
+        }
+        if (!found) {
+            System.out.println("No physiotherapists found for the given expertise.");
+        }
+    }
+
+    private static void searchByPhysiotherapistName() {
+        System.out.println("\n=== SEARCH TREATMENTS BY PHYSIOTHERAPIST NAME ===");
+        String name = getStringInput("Enter physiotherapist name: ");
+
+        boolean found = false;
+        for (BPC_Physiotherapist physio : system.getPhysiotherapists().values()) {
+            if (physio.getName().equalsIgnoreCase(name.trim())) {
+                System.out.println("Physiotherapist: " + physio.getName());
+                System.out.println("Expertise Areas: " + String.join(", ", physio.getExpertise()));
+                List<LocalDateTime> availableSlots = physio.getAvailableAppointments();
+                if (availableSlots.isEmpty()) {
+                    System.out.println("  No available slots.");
+                } else {
+                    for (LocalDateTime slot : availableSlots) {
+                        System.out.println("  Available slot: " + slot.format(dateTimeFormatter));
+                    }
+                }
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("No physiotherapist found with that name.");
+        }
+    }
 
     private static void generateReport() {
         System.out.println("\n=== GENERATE REPORT ===");
@@ -423,6 +479,8 @@ public class Main {
         System.out.println("10. List All Physiotherapists");
         System.out.println("11. Remove Patient");
         System.out.println("12. Reactivate Patient");
+        System.out.println("13. Search Physiotherapists by Expertise");
+        System.out.println("14. Search Physiotherapist by Name");
         System.out.println("0. Exit");
     }
 
